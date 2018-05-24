@@ -1,0 +1,18 @@
+# Common ignore
+.dockerignore
+.gitignore
+.git/
+0compose*
+
+# Ignore IDE
+.vscode/
+.idea/
+
+# Ignore for Python Project
+.venv/
+__pycache__/
+
+# Ignore build folder
+_build/
+
+tmp/
