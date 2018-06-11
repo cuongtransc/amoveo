@@ -114,6 +114,14 @@ doit({txs, 2, Checksums}) ->%request the txs for these checksums
 doit({txs, Txs}) ->
     tx_pool_feeder:absorb(Txs),
     {ok, 0};
+doit({txs, 3, N}) ->
+    B = block:get_by_height(N),
+    Txs = tl(B#block.txs),
+    Txids = lists:map(
+	      fun(Tx) -> hash:doit(testnet_sign:data(Tx)) end, 
+	      Txs),
+    X = [Txs, Txids],
+    {ok, X};
 doit({top}) -> 
     Top = block:top(),
     {ok, Top, Top#block.height};
@@ -251,6 +259,12 @@ doit({oracle, Y}) ->
     {ok, Question} = oracle_questions:get(Oracle#oracle.question),
     {ok, OB} = order_book:data(X),
     {ok, {OB, Question}};
+doit({oracle_bets, OID}) ->
+    B = block:top(),
+    Trees = B#block.trees,
+    Oracles = trees:oracles(Trees),
+    {_, Oracle, _} = oracles:get(OID, Oracles),
+    orders:get_all(Oracle#oracle.orders);%This does multiple hard drive reads. It could be a security vulnerability. Maybe we should keep copies of this data in ram, for recent blocks.
 doit({market_data, OID}) ->
     %{ok, OB} = order_book:data(base64:decode(OID)),
     {ok, OB} = order_book:data(OID),

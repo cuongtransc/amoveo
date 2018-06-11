@@ -41,6 +41,7 @@ handle_call(check, _From, X) ->
     {reply, X#pb.block, X};
 handle_call(read, _From, X) -> 
     D = delta(X#pb.time, now()),
+    %D = timer:now_diff(now(), X#pb.time) div 1000000,
     B = X#pb.block,
     BH = case B of
 	     "" -> 0;
@@ -48,8 +49,6 @@ handle_call(read, _From, X) ->
 	 end,
     TP = tx_pool:get(),
     NH = TP#tx_pool.height,
-    %api:sync(),
-    %sync:start(),
     Y = if
 	    B == "" ->
 		#pb{block = new_internal2(TP), time = now()};

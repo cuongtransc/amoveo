@@ -10,10 +10,33 @@ Maybe we should add a governance variables for each opcode in the VM. To be a ga
 
 Maybe question oracles don't need so much (any?) initial liquidity like governance oracles do.
 
+version in spend txs is not being used.
+
+
+
 
 
 
 ### Things to do
+
+* add function to api for checking signatures.
+* add tool to mining page for early payout.
+
+* block_hashes is getting too big in ram. We should delete old information out of it.
+
+
+* sync blocks faster
+- maybe block_absorber:save should be cast instead of call.
+- maybe checks in block_absorber:block_internal should be moved somewhere else where they can be run in parallel. block_absorber should write the new data to the consensus state, and nothing more.
+
+
+* sync_mode:normal and sync_mode:quick should be available from the api.
+
+* we should have more rules for ignoring bad peers. If they send the same request too often, or if they send invalid data more than 10 times per minute. 
+
+* tx are still being dropped.
+
+* during DDOS, sometimes nodes end up dropping all their peers, and are then unable to sync. We should refuse to black list the hard coded peers.
 
 * similar to the oracle lookup tool, we should have a governance value lookup tool in the light node.
 
